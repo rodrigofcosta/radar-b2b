@@ -20,7 +20,7 @@ URL_LEAD_N8N = "https://prd.synthix.com.br/webhook/cadastrar-lead"
 st.set_page_config(
     page_title="Radar B2B | Intelligence", 
     layout="wide", 
-    page_icon="logo.png",
+    page_icon="fav_ico.png",
     initial_sidebar_state="expanded"
 )
 
@@ -261,3 +261,4 @@ if st.session_state.usuario_logado:
                                 st.session_state.messages.append({"role": "assistant", "content": txt_resp})
                 else: st.error("Erro de comunicação com o servidor.")
 else: st.chat_input("Faça login na barra lateral para pesquisar...", disabled=True)
+
