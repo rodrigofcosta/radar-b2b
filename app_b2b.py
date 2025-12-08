@@ -20,7 +20,7 @@ URL_LEAD_N8N = "https://prd.synthix.com.br/webhook/cadastrar-lead"
 st.set_page_config(
     page_title="Radar B2B | Intelligence", 
     layout="wide", 
-    page_icon="fav_ico.png",
+    page_icon="logo.png",
     initial_sidebar_state="expanded"
 )
 
@@ -133,18 +133,21 @@ if "session_id" not in st.session_state: st.session_state.session_id = str(uuid.
 if "messages" not in st.session_state: st.session_state.messages = []
 
 # ==============================================================================
-# 🧱 BARRA LATERAL
+# 🧱 BARRA LATERAL (COM AVISO DE COBERTURA RJ)
 # ==============================================================================
 with st.sidebar:
+    # 1. LOGO GRANDE
     try:
         c1, c2, c3 = st.columns([0.05, 0.9, 0.05])
         with c2: st.image("logo.png", use_container_width=True)
     except: st.markdown("## 📡 Radar B2B")
 
+    # 2. TAGLINE
     st.markdown("""<div style='text-align: center; color: #555; font-size: 14px; margin-top: -10px; margin-bottom: 20px; font-weight: 500; letter-spacing: 0.5px;'>O mercado, rua por rua.</div>""", unsafe_allow_html=True)
     st.divider()
 
     if not st.session_state.usuario_logado:
+        # --- LOGIN (SEM ALTERAÇÕES) ---
         st.info("🔒 **Acesso Restrito**")
         with st.form("form_login"):
             nome = st.text_input("Nome")
@@ -156,8 +159,7 @@ with st.sidebar:
                 if nome and email:
                     valido, msg = validar_dados(email, telefone)
                     if valido:
-                        # --- DISPARO DO WEBHOOK DE LEAD ---
-                        # Formata o telefone e envia para o n8n
+                        # Disparo do Webhook
                         tel_limpo = msg if telefone else ""
                         salvar_lead(nome, email, empresa, tel_limpo)
                         
@@ -168,10 +170,41 @@ with st.sidebar:
                     else: st.error(msg)
                 else: st.warning("Preencha os campos obrigatórios.")
     else:
+        # --- ÁREA LOGADA ---
         st.success(f"Olá, **{st.session_state.nome_usuario}**")
-        st.markdown("### 💡 Dicas de Pesquisa")
-        st.markdown("- *Quantas padarias na Tijuca?*\n- *Liste as 5 maiores*\n- *Qual a mais antiga?*")
         
+        st.markdown("### 💡 Dicas de Pesquisa")
+        st.markdown("""
+        - *Quantas padarias na Tijuca?*
+        - *Liste as 5 maiores*
+        - *Qual a mais antiga?*
+        - *Salões de beleza no Centro*
+        """)
+        
+        st.markdown("---")
+        
+        # --- GUIA & INSTRUÇÕES (ATUALIZADO COM RJ) ---
+        with st.expander("ℹ️ Guia & Cobertura", expanded=False):
+            st.markdown("""
+            **🗺️ Cobertura Geográfica**
+            O banco de dados contempla exclusivamente empresas do **Estado do Rio de Janeiro (RJ)**.
+            
+            **📍 Localização Precisa**
+            Sempre cite o **Município**, **Bairro** ou a **Rua** para filtrar melhor os resultados.
+            
+            **📚 Busca por Atividade**
+            O sistema busca pelo código oficial (CNAE). Se não encontrar pelo nome comum, tente um sinônimo.
+            
+            **🤝 Colabore**
+            Não achou um nicho específico?
+            [**Me avise no LinkedIn**](https://www.linkedin.com/) para eu adicionar ao dicionário!
+            
+            <div style='font-size: 11px; color: #888; margin-top: 10px; border-top: 1px solid #eee; padding-top: 5px;'>
+            Fonte: Dados Públicos da Receita Federal do Brasil.
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Sair"):
             st.session_state.usuario_logado = False
             st.session_state.messages = []
@@ -261,4 +294,3 @@ if st.session_state.usuario_logado:
                                 st.session_state.messages.append({"role": "assistant", "content": txt_resp})
                 else: st.error("Erro de comunicação com o servidor.")
 else: st.chat_input("Faça login na barra lateral para pesquisar...", disabled=True)
-
