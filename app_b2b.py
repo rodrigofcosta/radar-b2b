@@ -197,7 +197,7 @@ with st.sidebar:
             
             **🤝 Colabore**
             Não achou um nicho específico?
-            [**Me avise no LinkedIn**](https://www.linkedin.com/) para eu adicionar ao dicionário!
+            [**Me avise no LinkedIn**](https://www.linkedin.com/in/rodrigo-f-costa/) para eu adicionar ao dicionário!
             
             <div style='font-size: 11px; color: #888; margin-top: 10px; border-top: 1px solid #eee; padding-top: 5px;'>
             Fonte: Dados Públicos da Receita Federal do Brasil.
@@ -294,4 +294,5 @@ if st.session_state.usuario_logado:
                                 st.session_state.messages.append({"role": "assistant", "content": txt_resp})
                 else: st.error("Erro de comunicação com o servidor.")
 else: st.chat_input("Faça login na barra lateral para pesquisar...", disabled=True)
+
 
