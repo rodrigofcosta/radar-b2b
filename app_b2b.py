@@ -88,11 +88,12 @@ def validar_dominio_dns(email):
     except: return False
 
 def validar_dados(email, telefone):
-    provedores_proibidos = ['gmail', 'hotmail', 'outlook', 'live', 'yahoo', 'uol', 'bol', 'terra', 'ig', 'icloud']
+    # --- ALTERAÇÃO: Removemos a lista de provedores proibidos ---
     if '@' not in email or '.' not in email: return False, "⚠️ E-mail inválido."
-    dominio = email.split('@')[-1].split('.')[0].lower()
-    if dominio in provedores_proibidos: return False, "⚠️ Utilize e-mail corporativo."
+    
+    # Mantemos a checagem de DNS para evitar erros de digitação (ex: gmil.com)
     if not validar_dominio_dns(email): return False, f"⚠️ O domínio @{email.split('@')[1]} parece não existir."
+    
     if telefone:
         tel = re.sub(r'\D', '', telefone)
         if len(tel) != 11: return False, "⚠️ O telefone deve ter DDD + 9 dígitos."
@@ -149,7 +150,7 @@ with st.sidebar:
         st.info("🔒 **Acesso Restrito**")
         with st.form("form_login"):
             nome = st.text_input("Nome")
-            email = st.text_input("E-mail Corporativo")
+            email = st.text_input("E-mail")
             empresa = st.text_input("Empresa")
             cargo = st.text_input("Cargo") # <--- Novo Input Aqui
             telefone = st.text_input("WhatsApp") 
@@ -295,6 +296,7 @@ if st.session_state.usuario_logado:
                                 st.session_state.messages.append({"role": "assistant", "content": txt_resp})
                 else: st.error("Erro de comunicação com o servidor.")
 else: st.chat_input("Faça login na barra lateral para pesquisar...", disabled=True)
+
 
 
 
