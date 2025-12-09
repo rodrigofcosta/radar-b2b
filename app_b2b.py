@@ -137,32 +137,32 @@ if "messages" not in st.session_state: st.session_state.messages = []
 # 🧱 BARRA LATERAL (COM AVISO DE COBERTURA RJ)
 # ==============================================================================
 with st.sidebar:
-    # 1. LOGO GRANDE
     try:
         c1, c2, c3 = st.columns([0.05, 0.9, 0.05])
         with c2: st.image("logo.png", use_container_width=True)
     except: st.markdown("## 📡 Radar B2B")
 
-    # 2. TAGLINE
     st.markdown("""<div style='text-align: center; color: #555; font-size: 14px; margin-top: -10px; margin-bottom: 20px; font-weight: 500; letter-spacing: 0.5px;'>O mercado, rua por rua.</div>""", unsafe_allow_html=True)
     st.divider()
 
     if not st.session_state.usuario_logado:
-        # --- LOGIN (SEM ALTERAÇÕES) ---
         st.info("🔒 **Acesso Restrito**")
         with st.form("form_login"):
             nome = st.text_input("Nome")
             email = st.text_input("E-mail Corporativo")
             empresa = st.text_input("Empresa")
+            cargo = st.text_input("Cargo") # <--- Novo Input Aqui
             telefone = st.text_input("WhatsApp") 
             
             if st.form_submit_button("Acessar Sistema", use_container_width=True):
                 if nome and email:
                     valido, msg = validar_dados(email, telefone)
                     if valido:
-                        # Disparo do Webhook
-                        tel_limpo = msg if telefone else ""
-                        salvar_lead(nome, email, empresa, tel_limpo)
+                        # Se msg tiver valor (telefone válido), usa ele. Se não, usa None.
+                        tel_para_envio = msg if telefone else None
+                        
+                        # Chama a função atualizada
+                        salvar_lead(nome, email, empresa, cargo, tel_para_envio)
                         
                         st.session_state.usuario_logado = True
                         st.session_state.email_usuario = email
@@ -295,6 +295,7 @@ if st.session_state.usuario_logado:
                                 st.session_state.messages.append({"role": "assistant", "content": txt_resp})
                 else: st.error("Erro de comunicação com o servidor.")
 else: st.chat_input("Faça login na barra lateral para pesquisar...", disabled=True)
+
 
 
 
