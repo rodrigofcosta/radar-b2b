@@ -100,7 +100,7 @@ def validar_dados(email, telefone):
     return True, None
 
 # --- NOVA FUNÇÃO: SALVAR LEAD ---
-def salvar_lead(nome, email, empresa, telefone):
+def salvar_lead(nome, email, empresa, cargo, telefone):
     """Envia os dados do usuário para o n8n ao fazer login"""
     try:
         if URL_LEAD_N8N:
@@ -295,6 +295,7 @@ if st.session_state.usuario_logado:
                                 st.session_state.messages.append({"role": "assistant", "content": txt_resp})
                 else: st.error("Erro de comunicação com o servidor.")
 else: st.chat_input("Faça login na barra lateral para pesquisar...", disabled=True)
+
 
 
 
