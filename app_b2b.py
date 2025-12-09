@@ -108,6 +108,7 @@ def salvar_lead(nome, email, empresa, telefone):
                 "nome": nome,
                 "email": email,
                 "empresa": empresa,
+                "cargo": cargo,
                 "telefone": telefone,
                 "data_acesso": time.strftime("%Y-%m-%d %H:%M:%S")
             }
@@ -294,5 +295,6 @@ if st.session_state.usuario_logado:
                                 st.session_state.messages.append({"role": "assistant", "content": txt_resp})
                 else: st.error("Erro de comunicação com o servidor.")
 else: st.chat_input("Faça login na barra lateral para pesquisar...", disabled=True)
+
 
 
